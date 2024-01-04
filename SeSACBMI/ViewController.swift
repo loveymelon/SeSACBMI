@@ -12,19 +12,34 @@ class ViewController: UIViewController {
     @IBOutlet var heightTextField: UITextField!
     @IBOutlet var weightTextField: UITextField!
     @IBOutlet var resultButton: UIButton!
+    @IBOutlet var nicknameTextField: UITextField!
+    @IBOutlet var yourNicknameLabel: UILabel!
     
-    var count = 0
+    var weight = UserDefaults.standard.string(forKey: "Weight") ?? ""
+    var height = UserDefaults.standard.string(forKey: "Height") ?? ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         settingTextField()
         designButton()
+        designLabel()
+        
+        designTextField(textField: heightTextField, keyText: "Height")
+        designTextField(textField: weightTextField, keyText: "Weight")
+    }
+    
+    func designTextField(textField: UITextField, keyText: String) {
+        textField.text = UserDefaults.standard.string(forKey: keyText)
     }
     
     func settingTextField() {
         self.heightTextField.delegate = self
         self.weightTextField.delegate = self
+    }
+    
+    func designLabel() {
+        yourNicknameLabel.text = "\(UserDefaults.standard.string(forKey: "Nickname") ?? "당신")의 BMI 지수를 알려드릴게요."
     }
     
     func designAlert(title: String? = nil ,text: String) {
@@ -40,7 +55,8 @@ class ViewController: UIViewController {
     func designButton() {
         resultButton.setTitleColor(.white, for: .normal)
         
-        if self.heightTextField.text?.isEmpty == false && self.weightTextField.text?.isEmpty == false {
+        if weight.isEmpty == false && height.isEmpty == false {
+            
             self.resultButton.isEnabled = true
             self.resultButton.backgroundColor = .purple
         } else {
@@ -119,8 +135,15 @@ class ViewController: UIViewController {
             }
         }
         
+        UserDefaults.standard.set(sender.text, forKey: "\(sender)")
+        
         if sender == weightTextField {
+            UserDefaults.standard.set(sender.text, forKey: "Weight")
+            weight = sender.text!
             designButton()
+        } else {
+            UserDefaults.standard.set(sender.text, forKey: "Height")
+            height = sender.text!
         }
         
     }
@@ -128,7 +151,7 @@ class ViewController: UIViewController {
     
     @IBAction func tappedResultButton(_ sender: UIButton) {
         
-        designAlert(title: "BMI 결과", text: calculater(weightValue: Double(self.weightTextField.text!)!, heightValue: Double(self.heightTextField.text!)!))
+        designAlert(title: "BMI 결과", text: calculater(weightValue: Double(weight)!, heightValue: Double(height)!))
         
     }
     
@@ -140,6 +163,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func returnkeyTextField(_ sender: UITextField) {
+    }
+    @IBAction func editNicknameTextField(_ sender: UITextField) {
+        UserDefaults.standard.set(sender.text, forKey: "Nickname")
     }
 }
 
