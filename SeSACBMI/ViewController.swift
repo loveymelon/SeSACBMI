@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var resultButton: UIButton!
     @IBOutlet var nicknameTextField: UITextField!
     @IBOutlet var yourNicknameLabel: UILabel!
+    @IBOutlet var resetButton: UIButton!
     
     var weight = UserDefaults.standard.string(forKey: "Weight") ?? ""
     var height = UserDefaults.standard.string(forKey: "Height") ?? ""
@@ -166,6 +167,20 @@ class ViewController: UIViewController {
     }
     @IBAction func editNicknameTextField(_ sender: UITextField) {
         UserDefaults.standard.set(sender.text, forKey: "Nickname")
+    }
+    @IBAction func tappedResetButton(_ sender: UIButton) {
+        UserDefaults.standard.removeObject(forKey: "Nickname")
+        UserDefaults.standard.removeObject(forKey: "Weight")
+        UserDefaults.standard.removeObject(forKey: "Height")
+        
+        self.heightTextField.text = ""
+        self.weightTextField.text = ""
+        
+        self.weight = ""
+        self.height = ""
+        
+        designButton()
+        designLabel()
     }
 }
 
